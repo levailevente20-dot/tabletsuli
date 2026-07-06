@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mama Tabletsulija</title>
+<style>
+  /* ---- Alap ---- */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --papir: #FBF5E9;
+    --tinta: #2B2418;
+    --halvany: #6B6250;
+    --zold: #2F6B3C;   /* Első lépések */
+    --lila: #5F3A73;   /* Képernyő és appok */
+    --piros: #B3261E;  /* YouTube */
+    --teal: #0E6470;   /* TikTok */
+    --sarga: #FFF1C9;  /* figyelmeztető doboz */
+    --tipp: #E8F0E4;   /* tipp doboz */
+  }
+  html { font-size: 22px; }
+  body {
+    font-family: system-ui, Roboto, "Segoe UI", Arial, sans-serif;
+    background: var(--papir);
+    color: var(--tinta);
+    line-height: 1.55;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+  h1, h2 { font-family: Georgia, "Noto Serif", "Times New Roman", serif; line-height: 1.2; }
+
+  a:focus-visible, button:focus-visible {
+    outline: 4px solid var(--tinta);
+    outline-offset: 3px;
+  }
+
+  /* ---- Lapozás: csak az aktív lap látszik (JS nélkül minden látszik) ---- */
+  .js .lap { display: none; }
+  .js .lap.aktiv { display: block; }
+
+  /* ---- Főoldal ---- */
+  header { text-align: center; padding: 1.2rem 0 0.6rem; }
+  header h1 { font-size: 2rem; }
+  header p { color: var(--halvany); font-size: 0.85rem; margin-top: 0.3rem; }
+
+  .udvozlet {
+    background: #fff;
+    border: 2px solid #E5DCC8;
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    margin: 1rem 0 1.4rem;
+    font-size: 0.95rem;
+  }
+
+  .menu { list-style: none; display: grid; gap: 0.8rem; }
+  .menu a {
+    display: flex; align-items: center; gap: 0.9rem;
+    min-height: 5.2rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 18px;
+    text-decoration: none;
+    color: #fff;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.25);
+  }
+  .menu a:active { transform: translateY(2px); box-shadow: none; }
+  .menu .ikon { font-size: 2.2rem; flex: none; }
+  .menu b { display: block; font-size: 1.15rem; }
+  .menu small { display: block; font-size: 0.8rem; opacity: 0.9; font-weight: normal; }
+  .m-zold  { background: var(--zold); }
+  .m-lila  { background: var(--lila); }
+  .m-piros { background: var(--piros); }
+  .m-teal  { background: var(--teal); }
+  .m-sos   { background: #8A6D1C; }
+
+  .menu-tanulsag {
+    text-align: center; color: var(--halvany);
+    font-size: 0.85rem; margin-top: 1.2rem; font-style: italic;
+  }
+
+  /* ---- Fejezetek ---- */
+  .vissza {
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    width: 100%;
+    min-height: 3.6rem;
+    margin: 0.4rem 0 1rem;
+    border: 3px solid var(--tinta);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--tinta);
+    text-decoration: none;
+    font-size: 1rem; font-weight: bold;
+  }
+  .fejcim {
+    color: #fff; border-radius: 16px;
+    padding: 1rem 1.2rem; margin-bottom: 1rem;
+  }
+  .fejcim h2 { font-size: 1.5rem; }
+  .fejcim p { font-size: 0.9rem; margin-top: 0.4rem; }
+  .f-zold  { background: var(--zold); }
+  .f-lila  { background: var(--lila); }
+  .f-piros { background: var(--piros); }
+  .f-teal  { background: var(--teal); }
+  .f-sos   { background: #8A6D1C; }
+
+  /* ---- Lépések nagy számokkal ---- */
+  .lepesek { list-style: none; counter-reset: lepes; display: grid; gap: 0.7rem; }
+  .lepesek li {
+    counter-increment: lepes;
+    background: #fff;
+    border: 2px solid #E5DCC8;
+    border-radius: 14px;
+    padding: 0.9rem 4.7rem 0.9rem 4.4rem;
+    position: relative;
+    min-height: 4.6rem;
+  }
+  .lepesek li::before {
+    content: counter(lepes);
+    position: absolute; left: 0.9rem; top: 0.9rem;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: bold; font-size: 1.2rem;
+    background: var(--szin, var(--tinta));
+  }
+  .sz-zold  { --szin: var(--zold); }
+  .sz-lila  { --szin: var(--lila); }
+  .sz-piros { --szin: var(--piros); }
+  .sz-teal  { --szin: var(--teal); }
+  .sz-sos   { --szin: #8A6D1C; }
+  .lepesek b { display: block; font-size: 1rem; }
+  .lepesek span { display: block; font-size: 0.85rem; color: var(--halvany); margin-top: 0.2rem; }
+
+  /* ---- Kis rajzok (piktogramok) a lépések mellett ---- */
+  .ill {
+    position: absolute; right: 0.8rem; top: 50%;
+    transform: translateY(-50%);
+    width: 2.9rem; height: 2.9rem;
+    color: var(--szin, var(--tinta));
+    fill: none; stroke: currentColor; stroke-width: 4;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* ---- Üzenetek ---- */
+  .m-rozsa, .f-rozsa, .kuldes { background: #A63D5F; }
+  .buborekok { display: grid; gap: 0.6rem; margin-bottom: 1rem; }
+  .buborek {
+    max-width: 85%; justify-self: start;
+    padding: 0.7rem 0.95rem; border-radius: 16px;
+    background: #fff; border: 2px solid #E5DCC8;
+    font-size: 0.95rem; overflow-wrap: break-word;
+  }
+  .buborek.enyem { justify-self: end; background: #F6E3EA; border-color: #D9A7BB; }
+  .buborek small { display: block; color: var(--halvany); font-size: 0.7rem; margin-top: 0.25rem; }
+  .iras { display: grid; gap: 0.6rem; }
+  .iras textarea {
+    font: inherit; font-size: 1rem; padding: 0.8rem;
+    border: 3px solid var(--tinta); border-radius: 14px; background: #fff;
+    min-height: 4.2rem; resize: none;
+  }
+  .kuldes {
+    min-height: 3.6rem; font-size: 1.1rem; font-weight: bold;
+    color: #fff; border: none; border-radius: 14px; cursor: pointer;
+  }
+  .kuldes:active { transform: translateY(2px); }
+  .kuldes:disabled { opacity: 0.6; }
+  .uzenet-info { text-align: center; color: var(--halvany); font-size: 0.85rem; margin: 0.6rem 0; }
+  .kivalaszto { display: grid; gap: 0.8rem; }
+  .kivalaszto p { text-align: center; font-size: 1rem; }
+  .kivalaszto button.profil {
+    min-height: 4.5rem; font-size: 1.15rem; font-weight: bold;
+    border-radius: 16px; border: 3px solid #A63D5F;
+    background: #fff; color: #A63D5F; cursor: pointer;
+  }
+  .kivalaszto button.profil.valasztva { background: #A63D5F; color: #fff; }
+  #pin-doboz { display: grid; gap: 0.7rem; margin-top: 0.4rem; }
+  #pin-doboz input {
+    font: inherit; font-size: 1.7rem; text-align: center; letter-spacing: 0.4em;
+    padding: 0.7rem; border: 3px solid var(--tinta); border-radius: 14px;
+    background: #fff; width: 100%;
+  }
+  .kilepes {
+    display: block; margin: 1.2rem auto 0;
+    background: none; border: none; cursor: pointer;
+    color: var(--halvany); font: inherit; font-size: 0.8rem;
+    text-decoration: underline;
+  }
+
+  /* ---- Tipp és Vigyázat dobozok ---- */
+  .tipp, .vigyazat {
+    border-radius: 14px; padding: 0.9rem 1rem; margin-top: 1rem; font-size: 0.9rem;
+  }
+  .tipp { background: var(--tipp); border: 2px solid #BFD4B4; }
+  .vigyazat { background: var(--sarga); border: 2px solid #E0C773; }
+  .tipp b, .vigyazat b { display: block; margin-bottom: 0.2rem; }
+
+  footer { text-align: center; color: var(--halvany); font-size: 0.75rem; margin-top: 2.5rem; }
+</style>
+</head>
+<body>
+
+<!-- Piktogram-készlet (a lapon lévő kis rajzok innen hivatkoznak) -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-be" viewBox="0 0 64 64">
+    <path d="M32 8v18"/><path d="M20 14a20 20 0 1 0 24 0"/>
+  </symbol>
+  <symbol id="i-fel" viewBox="0 0 64 64">
+    <circle cx="32" cy="48" r="6"/><path d="M32 40V16"/><path d="M22 26 32 16l10 10"/>
+  </symbol>
+  <symbol id="i-le" viewBox="0 0 64 64">
+    <circle cx="32" cy="16" r="6"/><path d="M32 24v24"/><path d="M22 38l10 10 10-10"/>
+  </symbol>
+  <symbol id="i-lapoz" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="6"/>
+    <path d="M24 32H10M15 27l-5 5 5 5"/>
+    <path d="M40 32h14M49 27l5 5-5 5"/>
+  </symbol>
+  <symbol id="i-koppint" viewBox="0 0 64 64">
+    <circle cx="32" cy="42" r="7"/>
+    <path d="M19 28a18 18 0 0 1 26 0"/>
+    <path d="M12 19a28 28 0 0 1 40 0"/>
+  </symbol>
+  <symbol id="i-hangero" viewBox="0 0 64 64">
+    <path d="M12 26h8l10-9v30l-10-9h-8z"/>
+    <path d="M40 25a10 10 0 0 1 0 14"/>
+    <path d="M47 19a19 19 0 0 1 0 26"/>
+  </symbol>
+  <symbol id="i-toltes" viewBox="0 0 64 64">
+    <rect x="8" y="22" width="40" height="20" rx="5"/>
+    <path d="M52 28h4v8h-4"/>
+    <path d="M30 25l-6 8h8l-6 8"/>
+  </symbol>
+  <symbol id="i-racs" viewBox="0 0 64 64">
+    <rect x="10" y="10" width="18" height="18" rx="5"/>
+    <rect x="36" y="10" width="18" height="18" rx="5"/>
+    <rect x="10" y="36" width="18" height="18" rx="5"/>
+    <rect x="36" y="36" width="18" height="18" rx="5"/>
+  </symbol>
+  <symbol id="i-kezdolap" viewBox="0 0 64 64">
+    <path d="M10 30 32 12l22 18"/><path d="M17 27v25h30V27"/>
+  </symbol>
+  <symbol id="i-visszanyil" viewBox="0 0 64 64">
+    <path fill="currentColor" stroke="none" d="M42 12 18 32l24 20z"/>
+  </symbol>
+  <symbol id="i-valt" viewBox="0 0 64 64">
+    <rect x="8" y="10" width="20" height="26" rx="5"/>
+    <rect x="36" y="10" width="20" height="26" rx="5"/>
+    <path d="M18 50h28M40 44l6 6-6 6"/>
+  </symbol>
+  <symbol id="i-yt" viewBox="0 0 64 64">
+    <rect x="8" y="14" width="48" height="36" rx="9"/>
+    <path fill="currentColor" stroke="none" d="M27 23l15 9-15 9z"/>
+  </symbol>
+  <symbol id="i-nagyito" viewBox="0 0 64 64">
+    <circle cx="27" cy="27" r="15"/><path d="M38 38 54 54"/>
+  </symbol>
+  <symbol id="i-bill" viewBox="0 0 64 64">
+    <rect x="6" y="18" width="52" height="28" rx="5"/>
+    <path d="M14 27h1M23 27h1M32 27h1M41 27h1M50 27h1M14 35h1M23 35h1M32 35h1M41 35h1M50 35h1M24 40h16"/>
+  </symbol>
+  <symbol id="i-pause" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="21"/><path d="M26 24v16M38 24v16"/>
+  </symbol>
+  <symbol id="i-zene" viewBox="0 0 64 64">
+    <path d="M24 46V16l20-5v28"/>
+    <circle cx="17" cy="46" r="7"/><circle cx="37" cy="39" r="7"/>
+  </symbol>
+  <symbol id="i-bezar" viewBox="0 0 64 64">
+    <rect x="10" y="10" width="44" height="44" rx="9"/>
+    <path d="M25 25l14 14M39 25 25 39"/>
+  </symbol>
+  <symbol id="i-sziv" viewBox="0 0 64 64">
+    <path d="M32 53C19 43 10 35 10 25a11 11 0 0 1 22-3 11 11 0 0 1 22 3c0 10-9 18-22 28z"/>
+  </symbol>
+</svg>
+
+<main>
+
+  <!-- ============ FŐOLDAL / MENÜ ============ -->
+  <section class="lap aktiv" id="menu">
+    <header>
+      <h1>Mama Tabletsulija</h1>
+      <p>Kézikönyv a tabletedhez — szeretettel: Levi ❤️</p>
+    </header>
+
+    <div class="udvozlet">
+      <b>Kedves Mama!</b> Ez az oldal lépésről lépésre megmutatja, hogyan
+      használd a tabletet. A legfontosabb, amit tudnod kell:
+      <b>nem tudsz elrontani semmit.</b> Bátran nyomkodd, bármikor újra lehet
+      kezdeni!
+    </div>
+
+    <ul class="menu">
+      <li><a class="m-zold" href="#elso-lepesek">
+        <span class="ikon">📱</span>
+        <span><b>Első lépések</b><small>Bekapcsolás, érintés, hangerő</small></span>
+      </a></li>
+      <li><a class="m-lila" href="#kepernyo">
+        <span class="ikon">🏠</span>
+        <span><b>A képernyő és az alkalmazások</b><small>Ikonok, menük, ki-be lépés</small></span>
+      </a></li>
+      <li><a class="m-piros" href="#youtube">
+        <span class="ikon">▶️</span>
+        <span><b>YouTube</b><small>Nóták, receptek, régi filmek</small></span>
+      </a></li>
+      <li><a class="m-teal" href="#tiktok">
+        <span class="ikon">🎵</span>
+        <span><b>TikTok</b><small>Rövid, vidám videók</small></span>
+      </a></li>
+      <li id="menu-uzenetek" hidden><a class="m-rozsa" href="#uzenetek">
+        <span class="ikon">💌</span>
+        <span><b>Üzenetek</b><small>Írj nekem — én is írok neked!</small></span>
+      </a></li>
+      <li><a class="m-sos" href="#segitseg">
+        <span class="ikon">🆘</span>
+        <span><b>Ha valami elakadt</b><small>Gyors segítség</small></span>
+      </a></li>
+    </ul>
+
+    <p class="menu-tanulsag">Ez itt fent egy <b>menü</b>. Így működik mindegyik:
+    koppints arra a gombra, ami érdekel!</p>
+  </section>
+
+  <!-- ============ 1. ELSŐ LÉPÉSEK ============ -->
+  <section class="lap" id="elso-lepesek">
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+    <div class="fejcim f-zold">
+      <h2>📱 Első lépések</h2>
+      <p>A tablet olyan, mint egy képeskönyv, amit az ujjaddal lapozol.</p>
+    </div>
+    <ol class="lepesek">
+      <li class="sz-zold"><b>Bekapcsolás: tartsd nyomva az oldalsó gombot.</b>
+        <span>Számolj el háromig, amíg a képernyő fel nem villan.</span>
+        <svg class="ill"><use href="#i-be" xlink:href="#i-be"/></svg></li>
+      <li class="sz-zold"><b>Feloldás: húzd az ujjad a képernyőn felfelé.</b>
+        <span>Mintha felhajtanál egy függönyt. Ezután látod a főképernyőt.</span>
+        <svg class="ill"><use href="#i-fel" xlink:href="#i-fel"/></svg></li>
+      <li class="sz-zold"><b>Koppintás = egy finom, rövid érintés.</b>
+        <span>Így „nyomsz meg" gombokat. Nem kell erősen nyomni — olyan, mint egy simítás.</span>
+        <svg class="ill"><use href="#i-koppint" xlink:href="#i-koppint"/></svg></li>
+      <li class="sz-zold"><b>Lapozás: az ujjadat a képernyőn tartva húzod.</b>
+        <span>Jobbra-balra vagy fel-le, mint amikor könyvet lapozol.</span>
+        <svg class="ill"><use href="#i-lapoz" xlink:href="#i-lapoz"/></svg></li>
+      <li class="sz-zold"><b>Hangerő: a hosszúkás oldalsó gombbal.</b>
+        <span>A felső fele hangosít, az alsó halkít.</span>
+        <svg class="ill"><use href="#i-hangero" xlink:href="#i-hangero"/></svg></li>
+      <li class="sz-zold"><b>Töltés: dugd be a kábelt, mint a telefont.</b>
+        <span>A jobb felső sarokban egy kis elem mutatja, mennyire van feltöltve.</span>
+        <svg class="ill"><use href="#i-toltes" xlink:href="#i-toltes"/></svg></li>
+    </ol>
+    <div class="tipp"><b>💚 Jó tudni</b>
+      Ha egy darabig nem nyúlsz hozzá, a képernyő magától elsötétül — ez nem
+      hiba, csak „elalszik". Az oldalsó gomb egy rövid megnyomásával felébred.</div>
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+  </section>
+
+  <!-- ============ 2. KÉPERNYŐ ÉS APPOK ============ -->
+  <section class="lap" id="kepernyo">
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+    <div class="fejcim f-lila">
+      <h2>🏠 A képernyő és az alkalmazások</h2>
+      <p>A főképernyő olyan, mint egy asztal, amin a szerszámaid sorakoznak.</p>
+    </div>
+    <ol class="lepesek">
+      <li class="sz-lila"><b>A kis képecskék neve: ikon.</b>
+        <span>Mindegyik ikon egy-egy alkalmazást nyit ki. Az alkalmazás (röviden: „app")
+        egy szerszám — az egyik videót mutat, a másik fényképez, a harmadik üzenetet küld.</span>
+        <svg class="ill"><use href="#i-racs" xlink:href="#i-racs"/></svg></li>
+      <li class="sz-lila"><b>Megnyitás: koppints egyszer az ikonra.</b>
+        <span>Várj egy pillanatot, és kinyílik.</span>
+        <svg class="ill"><use href="#i-koppint" xlink:href="#i-koppint"/></svg></li>
+      <li class="sz-lila"><b>Hazatérés: a képernyő alján, középen van a Kezdőlap gomb.</b>
+        <span>Egy kör vagy házikó. Bárhol vagy, bármi történt — ez mindig hazavisz a főképernyőre.</span>
+        <svg class="ill"><use href="#i-kezdolap" xlink:href="#i-kezdolap"/></svg></li>
+      <li class="sz-lila"><b>Visszalépés: a kis nyíl ◁ egyet visszalép.</b>
+        <span>Mintha visszalapoznál egy oldalt a könyvben.</span>
+        <svg class="ill"><use href="#i-visszanyil" xlink:href="#i-visszanyil"/></svg></li>
+      <li class="sz-lila"><b>Másik alkalmazásra váltás: menj haza, aztán koppints a másikra.</b>
+        <span>Nyomd meg a Kezdőlap gombot, majd koppints egy másik ikonra. Ennyi az egész!</span>
+        <svg class="ill"><use href="#i-valt" xlink:href="#i-valt"/></svg></li>
+    </ol>
+    <div class="tipp"><b>💜 A Kezdőlap gomb a mentőöved</b>
+      Ha bármikor eltévedsz, vagy valami furcsát látsz: nyomd meg a Kezdőlap
+      gombot, és minden visszaáll. Ettől soha semmi baj nem lesz.</div>
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+  </section>
+
+  <!-- ============ 3. YOUTUBE ============ -->
+  <section class="lap" id="youtube">
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+    <div class="fejcim f-piros">
+      <h2>▶️ YouTube</h2>
+      <p>Videók milliói, ingyen: nóták, operett, receptek, kertészkedés,
+      régi filmek. Nem kell hozzá regisztrálni.</p>
+    </div>
+    <ol class="lepesek">
+      <li class="sz-piros"><b>Keresd a piros ikont a fehér háromszöggel ▶ és koppints rá.</b>
+        <span>Ez a YouTube. Megnyílik, és máris videókat látsz.</span>
+        <svg class="ill"><use href="#i-yt" xlink:href="#i-yt"/></svg></li>
+      <li class="sz-piros"><b>Kereséshez koppints a nagyítóra 🔍 a jobb felső sarokban.</b>
+        <span>Ide írhatod be, mit szeretnél nézni.</span>
+        <svg class="ill"><use href="#i-nagyito" xlink:href="#i-nagyito"/></svg></li>
+      <li class="sz-piros"><b>Alul megjelenik a billentyűzet — koppintsd le a betűket.</b>
+        <span>Írd be például: „operett" vagy „rétes recept". A végén koppints a nagyítóra a billentyűzeten.</span>
+        <svg class="ill"><use href="#i-bill" xlink:href="#i-bill"/></svg></li>
+      <li class="sz-piros"><b>Videó elindítása: koppints a képére.</b>
+        <span>A videó magától elindul.</span>
+        <svg class="ill"><use href="#i-koppint" xlink:href="#i-koppint"/></svg></li>
+      <li class="sz-piros"><b>Megállítás: koppints a videóra, aztán a ❚❚ jelre.</b>
+        <span>Folytatáshoz ugyanígy, csak a ▶ jelre koppints.</span>
+        <svg class="ill"><use href="#i-pause" xlink:href="#i-pause"/></svg></li>
+      <li class="sz-piros"><b>Másik videóhoz lapozz lefelé, és koppints egy másik képre.</b>
+        <span>A videó alatt mindig újabb ajánlatok sorakoznak.</span>
+        <svg class="ill"><use href="#i-le" xlink:href="#i-le"/></svg></li>
+    </ol>
+    <div class="tipp"><b>❤️ Jó tudni: a reklám</b>
+      A videók előtt néha reklám jön. Pár másodperc múlva megjelenik egy
+      <b>„Kihagyás"</b> gomb — koppints rá, és jön a videód.</div>
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+  </section>
+
+  <!-- ============ 4. TIKTOK ============ -->
+  <section class="lap" id="tiktok">
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+    <div class="fejcim f-teal">
+      <h2>🎵 TikTok</h2>
+      <p>Rövid, pár másodperces videók, egyik a másik után. Csak nézelődni is
+      lehet, nem kell regisztrálni.</p>
+    </div>
+    <ol class="lepesek">
+      <li class="sz-teal"><b>Keresd a fekete ikont a hangjeggyel, és koppints rá.</b>
+        <span>Megnyílik, és rögtön elindul egy videó.</span>
+        <svg class="ill"><use href="#i-zene" xlink:href="#i-zene"/></svg></li>
+      <li class="sz-teal"><b>Következő videó: húzd az ujjad felfelé.</b>
+        <span>Mint amikor lapozol. Mindig jön egy újabb videó — sosem fogy el.</span>
+        <svg class="ill"><use href="#i-fel" xlink:href="#i-fel"/></svg></li>
+      <li class="sz-teal"><b>Vissza az előzőhöz: húzd az ujjad lefelé.</b>
+        <span>Ha valamit még egyszer meg akarsz nézni.</span>
+        <svg class="ill"><use href="#i-le" xlink:href="#i-le"/></svg></li>
+      <li class="sz-teal"><b>Megállítás: koppints a videóra egyszer.</b>
+        <span>Még egy koppintás, és megy tovább.</span>
+        <svg class="ill"><use href="#i-koppint" xlink:href="#i-koppint"/></svg></li>
+      <li class="sz-teal"><b>Ha valami nem érdekel, egyszerűen lapozz tovább.</b>
+        <span>Idővel egyre több olyat mutat majd, amit szeretsz nézni.</span>
+        <svg class="ill"><use href="#i-fel" xlink:href="#i-fel"/></svg></li>
+      <li class="sz-teal"><b>Ha egy ablak bejelentkezést kér, koppints a kis ✕-re a sarkában.</b>
+        <span>Utána nyugodtan nézelődhetsz tovább.</span>
+        <svg class="ill"><use href="#i-bezar" xlink:href="#i-bezar"/></svg></li>
+    </ol>
+    <div class="vigyazat"><b>⚠️ Erre az egyre vigyázz</b>
+      Ha bármi <b>nyereményt ígér</b>, vagy <b>nevet, címet, bankkártyát</b> kér —
+      soha ne írj be semmit! Ilyenkor csak lapozz tovább, vagy nyomd meg a
+      Kezdőlap gombot — és mutasd meg nekem, ha legközelebb ott vagyok.</div>
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+  </section>
+
+  <!-- ============ ÜZENETEK ============ -->
+  <section class="lap" id="uzenetek">
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+    <div class="fejcim f-rozsa">
+      <h2>💌 Üzenetek</h2>
+      <p>Ide írhatunk egymásnak. Amit ideírsz, én is elolvasom, és válaszolok!</p>
+    </div>
+
+    <div class="kivalaszto" id="ki-vagy" hidden>
+      <p><b>Ki szeretne belépni?</b><br>Koppints a nevedre!</p>
+      <button type="button" class="profil" data-nev="Mama">👵 Mama</button>
+      <button type="button" class="profil" data-nev="Levi">😊 Levi</button>
+      <div id="pin-doboz" hidden>
+        <p id="pin-cim" style="text-align:center"></p>
+        <input id="pin" type="password" inputmode="numeric" maxlength="8"
+               autocomplete="off" placeholder="••••">
+        <button class="kuldes" type="button" id="belep">🔑 Belépés</button>
+        <p class="uzenet-info" id="pin-hiba"></p>
+      </div>
+    </div>
+
+    <div id="uzeno" hidden>
+      <div class="buborekok" id="buborekok"></div>
+      <p class="uzenet-info" id="uzenet-info">Üzenetek betöltése…</p>
+      <div class="iras">
+        <textarea id="szoveg" rows="2" placeholder="Írj ide valamit…"></textarea>
+        <button class="kuldes" type="button" id="kuld">💌 Elküldés</button>
+      </div>
+      <button class="kilepes" type="button" id="kilep">🚪 Kilépés — másik profil belépése</button>
+      <div class="tipp" style="margin-top:1.2rem"><b>💗 Jó tudni</b>
+        Az üzenetküldéshez internet kell. Ha nem megy át az üzenet, próbáld meg
+        kicsit később — nem veszik el, amit beírtál.</div>
+    </div>
+  </section>
+
+  <!-- ============ 5. SEGÍTSÉG ============ -->
+  <section class="lap" id="segitseg">
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+    <div class="fejcim f-sos">
+      <h2>🆘 Ha valami elakadt</h2>
+      <p>Semmi pánik — ezek a leggyakoribb helyzetek, és mind egy mozdulat.</p>
+    </div>
+    <ol class="lepesek">
+      <li class="sz-sos"><b>Fekete a képernyő?</b>
+        <span>Csak elaludt. Nyomd meg röviden az oldalsó gombot, és felébred.</span>
+        <svg class="ill"><use href="#i-be" xlink:href="#i-be"/></svg></li>
+      <li class="sz-sos"><b>Eltévedtél, furcsa dolgot látsz?</b>
+        <span>Nyomd meg a Kezdőlap gombot (alul, középen). Mindig hazavisz.</span>
+        <svg class="ill"><use href="#i-kezdolap" xlink:href="#i-kezdolap"/></svg></li>
+      <li class="sz-sos"><b>Nincs hang?</b>
+        <span>Nyomd meg párszor az oldalsó hosszú gomb felső felét.</span>
+        <svg class="ill"><use href="#i-hangero" xlink:href="#i-hangero"/></svg></li>
+      <li class="sz-sos"><b>Semmi nem segít?</b>
+        <span>Tedd le nyugodtan a tabletet — semmi baja nem lesz. Amikor legközelebb
+        nálad járok, együtt megnézzük.</span>
+        <svg class="ill"><use href="#i-sziv" xlink:href="#i-sziv"/></svg></li>
+    </ol>
+    <div class="tipp"><b>💛 Ne feledd</b>
+      A tabletet nyomkodással nem lehet elrontani. A legrosszabb, ami történhet,
+      hogy megnyomjuk a Kezdőlap gombot, és kezdjük elölről.</div>
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+  </section>
+
+  <footer>Készült szeretettel, 2026 · Ez az oldal internet nélkül is működik, ha egyszer megnyitottad.</footer>
+</main>
+
+<script>
+  // Egyszerű lapozás: mindig csak az egyik szakasz látszik.
+  // A tablet "Vissza" gombja is működik, mert a cím (#hash) változik.
+  document.body.classList.add('js');
+  function lapoz() {
+    var id = location.hash.slice(1) || 'menu';
+    var lapok = document.querySelectorAll('.lap');
+    var talalt = false;
+    for (var i = 0; i < lapok.length; i++) {
+      var aktiv = lapok[i].id === id;
+      lapok[i].classList.toggle('aktiv', aktiv);
+      if (aktiv) talalt = true;
+    }
+    if (!talalt) document.getElementById('menu').classList.add('aktiv');
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', lapoz);
+  lapoz();
+
+  // ================= ÜZENETEK =================
+  // Ide másold be a Firebase adatbázisod címét, a végére "/uzenetek"-kel, pl.:
+  // var POSTALADA = 'https://mama-uzenetek-default-rtdb.europe-west1.firebasedatabase.app/uzenetek';
+  // Amíg ez üres, az Üzenetek menüpont nem is látszik.
+  var POSTALADA = 'https://levail-default-rtdb.europe-west1.firebasedatabase.app/uzenetek';
+
+  (function () {
+    if (!POSTALADA || !window.fetch) return;
+    document.getElementById('menu-uzenetek').hidden = false;
+
+    var nev = localStorage.getItem('uzeno-nev');
+    var kivalaszto = document.getElementById('ki-vagy');
+    var uzeno = document.getElementById('uzeno');
+    var info = document.getElementById('uzenet-info');
+    var doboz = document.getElementById('buborekok');
+    var mezo = document.getElementById('szoveg');
+    var gomb = document.getElementById('kuld');
+
+    function mutat() {
+      kivalaszto.hidden = !!nev;
+      uzeno.hidden = !nev;
+    }
+
+    // Profilok és titkos számaik (PIN) — itt tudod átírni őket:
+    var PROFILOK = { 'Mama': '1111', 'Levi': '2001' };
+
+    if (nev && !PROFILOK[nev]) nev = null; // régi/ismeretlen profil törlése
+
+    var valasztott = null;
+    var pinDoboz = document.getElementById('pin-doboz');
+    var pinMezo = document.getElementById('pin');
+    var pinHiba = document.getElementById('pin-hiba');
+
+    kivalaszto.addEventListener('click', function (e) {
+      var b = e.target.closest('button.profil');
+      if (!b) return;
+      valasztott = b.getAttribute('data-nev');
+      var gombok = kivalaszto.querySelectorAll('button.profil');
+      for (var i = 0; i < gombok.length; i++) {
+        gombok[i].classList.toggle('valasztva', gombok[i] === b);
+      }
+      document.getElementById('pin-cim').innerHTML =
+        '<b>' + valasztott + '</b>, írd be a titkos számodat:';
+      pinDoboz.hidden = false;
+      pinHiba.textContent = '';
+      pinMezo.value = '';
+      pinMezo.focus();
+    });
+
+    function belepes() {
+      if (!valasztott) return;
+      if (pinMezo.value === PROFILOK[valasztott]) {
+        nev = valasztott;
+        localStorage.setItem('uzeno-nev', nev);
+        pinDoboz.hidden = true;
+        mutat();
+        frissit();
+      } else {
+        pinMezo.value = '';
+        pinHiba.textContent = 'Ez nem a jó szám — próbáld meg újra!';
+      }
+    }
+    document.getElementById('belep').addEventListener('click', belepes);
+    pinMezo.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') belepes();
+    });
+
+    document.getElementById('kilep').addEventListener('click', function () {
+      nev = null;
+      valasztott = null;
+      localStorage.removeItem('uzeno-nev');
+      pinDoboz.hidden = true;
+      var gombok = kivalaszto.querySelectorAll('button.profil');
+      for (var i = 0; i < gombok.length; i++) gombok[i].classList.remove('valasztva');
+      mutat();
+    });
+
+    function rajzol(adat) {
+      var lista = [];
+      for (var k in adat) {
+        if (adat[k] && adat[k].szoveg) lista.push(adat[k]);
+      }
+      lista.sort(function (a, b) { return a.ido - b.ido; });
+      lista = lista.slice(-50); // csak az utolsó 50 üzenet
+      doboz.innerHTML = '';
+      for (var i = 0; i < lista.length; i++) {
+        var u = lista[i];
+        var d = document.createElement('div');
+        d.className = 'buborek' + (u.nev === nev ? ' enyem' : '');
+        var t = document.createElement('div');
+        t.textContent = u.szoveg;
+        var s = document.createElement('small');
+        s.textContent = u.nev + ' · ' + new Date(u.ido).toLocaleString('hu-HU',
+          { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        d.appendChild(t);
+        d.appendChild(s);
+        doboz.appendChild(d);
+      }
+      info.textContent = lista.length ? '' : 'Még nincs üzenet — írd meg az elsőt!';
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    var toltesFolyamatban = false;
+    function frissit() {
+      if (location.hash !== '#uzenetek' || !nev || toltesFolyamatban) return;
+      toltesFolyamatban = true;
+      fetch(POSTALADA + '.json')
+        .then(function (v) { return v.json(); })
+        .then(function (adat) {
+          toltesFolyamatban = false;
+          rajzol(adat || {});
+        })
+        .catch(function () {
+          toltesFolyamatban = false;
+          info.textContent = 'Most nincs internet — próbáld meg kicsit később.';
+        });
+    }
+
+    gomb.addEventListener('click', function () {
+      var szoveg = mezo.value.trim();
+      if (!szoveg) return;
+      gomb.disabled = true;
+      fetch(POSTALADA + '.json', {
+        method: 'POST',
+        body: JSON.stringify({ nev: nev, szoveg: szoveg, ido: Date.now() })
+      }).then(function () {
+        mezo.value = '';
+        gomb.disabled = false;
+        frissit();
+      }).catch(function () {
+        gomb.disabled = false;
+        info.textContent = 'Nem sikerült elküldeni — próbáld meg újra!';
+      });
+    });
+
+    window.addEventListener('hashchange', function () { mutat(); frissit(); });
+    setInterval(frissit, 20000); // 20 másodpercenként megnézi, jött-e új üzenet
+    mutat();
+    frissit();
+  })();
+</script>
+</body>
+</html>
