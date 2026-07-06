@@ -184,6 +184,16 @@
     text-decoration: underline;
   }
 
+  /* ---- Ajánló gomb (külső hivatkozás) ---- */
+  .ajanlo {
+    display: block; margin-top: 1rem; padding: 0.9rem 1.1rem;
+    background: #fff; border: 3px solid var(--piros); border-radius: 14px;
+    color: var(--tinta); text-decoration: none; font-size: 0.95rem;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+  }
+  .ajanlo:active { transform: translateY(2px); box-shadow: none; }
+  .ajanlo b { display: block; color: var(--piros); font-size: 1.05rem; }
+
   /* ---- Tipp és Vigyázat dobozok ---- */
   .tipp, .vigyazat {
     border-radius: 14px; padding: 0.9rem 1rem; margin-top: 1rem; font-size: 0.9rem;
@@ -414,6 +424,10 @@
     <div class="tipp"><b>❤️ Jó tudni: a reklám</b>
       A videók előtt néha reklám jön. Pár másodperc múlva megjelenik egy
       <b>„Kihagyás"</b> gomb — koppints rá, és jön a videód.</div>
+    <a class="ajanlo" href="intent://www.youtube.com/@Telexponthu/streams#Intent;package=com.google.android.youtube;scheme=https;S.browser_fallback_url=https%3A%2F%2Fwww.youtube.com%2F%40Telexponthu%2Fstreams;end">
+      <b>📺 Politika élő adás:</b>
+      Koppints ide, és megnyílik a Telex élő adása a YouTube-on!
+    </a>
     <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
   </section>
 
