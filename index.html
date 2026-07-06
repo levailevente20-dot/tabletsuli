@@ -184,6 +184,21 @@
     text-decoration: underline;
   }
 
+  /* ---- Keresési ötletek (chipek) ---- */
+  .otletek {
+    margin-top: 1rem; padding: 0.9rem 1rem;
+    background: #fff; border: 2px solid #E5DCC8; border-radius: 14px;
+  }
+  .otletek > b { display: block; font-size: 0.95rem; margin-bottom: 0.7rem; }
+  .chipek { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .chip {
+    display: inline-block; padding: 0.65rem 1.05rem;
+    border-radius: 999px; background: var(--piros); color: #fff;
+    text-decoration: none; font-size: 0.9rem; font-weight: bold;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+  }
+  .chip:active { transform: translateY(2px); box-shadow: none; }
+
   /* ---- Ajánló gomb (külső hivatkozás) ---- */
   .ajanlo {
     display: block; margin-top: 1rem; padding: 0.9rem 1.1rem;
@@ -421,6 +436,19 @@
         <span>A videó alatt mindig újabb ajánlatok sorakoznak.</span>
         <svg class="ill"><use href="#i-le" xlink:href="#i-le"/></svg></li>
     </ol>
+    <div class="otletek">
+      <b>💡 Nem tudod, mit keress? Íme pár ötlet — koppints rá, és máris nézheted:</b>
+      <div class="chipek">
+        <a class="chip">Görög táncosok</a>
+        <a class="chip">Magyar néptánc</a>
+        <a class="chip">Hogyan kell szőlőt kacsolni?</a>
+        <a class="chip">Magyar nóták</a>
+        <a class="chip">Operettslágerek</a>
+        <a class="chip">Régi magyar filmek</a>
+        <a class="chip">Rétes készítése</a>
+        <a class="chip">Muskátli gondozása</a>
+      </div>
+    </div>
     <div class="tipp"><b>❤️ Jó tudni: a reklám</b>
       A videók előtt néha reklám jön. Pár másodperc múlva megjelenik egy
       <b>„Kihagyás"</b> gomb — koppints rá, és jön a videód.</div>
@@ -550,6 +578,22 @@
   }
   window.addEventListener('hashchange', lapoz);
   lapoz();
+
+  // A keresési ötlet-gombok linkjei: a gomb felirata lesz a YouTube-keresés.
+  // Androidon a YouTube appban nyílik meg, máshol a böngészőben.
+  (function () {
+    var chipek = document.querySelectorAll('.chip');
+    var android = /Android/i.test(navigator.userAgent);
+    for (var i = 0; i < chipek.length; i++) {
+      var szo = encodeURIComponent(chipek[i].textContent.trim());
+      var webcim = 'https://www.youtube.com/results?search_query=' + szo;
+      chipek[i].href = android
+        ? 'intent://www.youtube.com/results?search_query=' + szo +
+          '#Intent;package=com.google.android.youtube;scheme=https;S.browser_fallback_url=' +
+          encodeURIComponent(webcim) + ';end'
+        : webcim;
+    }
+  })();
 
   // ================= ÜZENETEK =================
   // Ide másold be a Firebase adatbázisod címét, a végére "/uzenetek"-kel, pl.:
