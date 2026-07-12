@@ -207,15 +207,18 @@
   }
   .chip:active { transform: translateY(2px); box-shadow: none; }
 
-  /* ---- Ajánló gomb (külső hivatkozás) ---- */
+  /* ---- Csatorna-ajánló gombok ---- */
   .ajanlo {
-    display: block; margin-top: 1rem; padding: 0.9rem 1.1rem;
-    background: #fff; border: 3px solid var(--piros); border-radius: 14px;
-    color: var(--tinta); text-decoration: none; font-size: 0.95rem;
-    box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+    display: flex; align-items: center; gap: 0.9rem;
+    min-height: 4.4rem; margin-top: 0.8rem; padding: 0.8rem 1.1rem;
+    background: var(--piros); color: #fff;
+    border-radius: 16px; text-decoration: none;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.25);
   }
   .ajanlo:active { transform: translateY(2px); box-shadow: none; }
-  .ajanlo b { display: block; color: var(--piros); font-size: 1.05rem; }
+  .ajanlo .ikon { font-size: 1.9rem; flex: none; }
+  .ajanlo b { display: block; font-size: 1.02rem; }
+  .ajanlo small { display: block; font-size: 0.78rem; opacity: 0.9; }
 
   /* ---- Tipp és Vigyázat dobozok ---- */
   .tipp, .vigyazat {
@@ -506,10 +509,21 @@
     <div class="tipp"><b>❤️ Jó tudni: a reklám</b>
       A videók előtt néha reklám jön. Pár másodperc múlva megjelenik egy
       <b>„Kihagyás"</b> gomb — koppints rá, és jön a videód.</div>
-    <a class="ajanlo" href="intent://www.youtube.com/@Telexponthu/streams#Intent;package=com.google.android.youtube;scheme=https;S.browser_fallback_url=https%3A%2F%2Fwww.youtube.com%2F%40Telexponthu%2Fstreams;end">
-      <b>📺 Politika élő adás:</b>
-      Koppints ide, és megnyílik a Telex élő adása a YouTube-on!
-    </a>
+    <div class="otletek">
+      <b>📺 Ajánlott csatornák — koppints a gombra, és megnyílik a YouTube-ban:</b>
+      <a class="ajanlo appnyito" href="https://www.youtube.com/@Telexponthu/streams">
+        <span class="ikon">🔴</span>
+        <span><b>Politika élő adás — Telex</b><small>Élő beszélgetések, hírek</small></span>
+      </a>
+      <a class="ajanlo appnyito" href="https://www.youtube.com/@kontrollhu">
+        <span class="ikon">📺</span>
+        <span><b>Kontroll</b><small>Politikai műsorok, beszélgetések</small></span>
+      </a>
+      <a class="ajanlo appnyito" href="https://www.youtube.com/@magyarorszagkedvencmusora">
+        <span class="ikon">📺</span>
+        <span><b>Magyarország kedvenc műsora</b><small>Szórakoztató videók</small></span>
+      </a>
+    </div>
     <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
   </section>
 
@@ -633,19 +647,28 @@
   window.addEventListener('hashchange', lapoz);
   lapoz();
 
-  // A keresési ötlet-gombok linkjei: a gomb felirata lesz a YouTube-keresés.
-  // Androidon a YouTube appban nyílik meg, máshol a böngészőben.
+  // YouTube-linkek: Androidon a YouTube appban nyílnak meg, máshol a böngészőben.
   (function () {
-    var chipek = document.querySelectorAll('.chip');
     var android = /Android/i.test(navigator.userAgent);
+
+    function appLink(webcim) {
+      return 'intent://' + webcim.replace('https://', '') +
+        '#Intent;package=com.google.android.youtube;scheme=https;S.browser_fallback_url=' +
+        encodeURIComponent(webcim) + ';end';
+    }
+
+    // Keresési ötlet-gombok: a gomb felirata lesz a keresőszó.
+    var chipek = document.querySelectorAll('.chip');
     for (var i = 0; i < chipek.length; i++) {
-      var szo = encodeURIComponent(chipek[i].textContent.trim());
-      var webcim = 'https://www.youtube.com/results?search_query=' + szo;
-      chipek[i].href = android
-        ? 'intent://www.youtube.com/results?search_query=' + szo +
-          '#Intent;package=com.google.android.youtube;scheme=https;S.browser_fallback_url=' +
-          encodeURIComponent(webcim) + ';end'
-        : webcim;
+      var webcim = 'https://www.youtube.com/results?search_query=' +
+        encodeURIComponent(chipek[i].textContent.trim());
+      chipek[i].href = android ? appLink(webcim) : webcim;
+    }
+
+    // Csatorna-ajánló gombok: a href-ben lévő cím nyílik meg.
+    var ajanlok = document.querySelectorAll('.appnyito');
+    for (var j = 0; j < ajanlok.length; j++) {
+      if (android) ajanlok[j].href = appLink(ajanlok[j].getAttribute('href'));
     }
   })();
 
