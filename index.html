@@ -184,6 +184,14 @@
     text-decoration: underline;
   }
 
+  /* ---- Nagy ábra (illusztráció) ---- */
+  .abra {
+    background: #fff; border: 2px solid #E5DCC8; border-radius: 14px;
+    padding: 1rem 1rem 0.7rem; margin-bottom: 1rem; text-align: center;
+  }
+  .abra svg { width: 100%; max-width: 420px; height: auto; }
+  .abra figcaption { font-size: 0.85rem; color: var(--halvany); margin-top: 0.4rem; }
+
   /* ---- Keresési ötletek (chipek) ---- */
   .otletek {
     margin-top: 1rem; padding: 0.9rem 1rem;
@@ -296,6 +304,10 @@
     <rect x="10" y="10" width="44" height="44" rx="9"/>
     <path d="M25 25l14 14M39 25 25 39"/>
   </symbol>
+  <symbol id="i-futok" viewBox="0 0 64 64">
+    <rect x="12" y="18" width="32" height="36" rx="5"/>
+    <path d="M22 10h22a8 8 0 0 1 8 8v26"/>
+  </symbol>
   <symbol id="i-sziv" viewBox="0 0 64 64">
     <path d="M32 53C19 43 10 35 10 25a11 11 0 0 1 22-3 11 11 0 0 1 22 3c0 10-9 18-22 28z"/>
   </symbol>
@@ -355,6 +367,38 @@
       <h2>📱 Első lépések</h2>
       <p>A tablet olyan, mint egy képeskönyv, amit az ujjaddal lapozol.</p>
     </div>
+
+    <figure class="abra">
+      <svg viewBox="0 0 440 320" role="img"
+           aria-label="A tablet helyes tartása: a kamera jobb oldalt középen, a hangerő gomb és a főgomb jobbra lent van">
+        <g fill="none" stroke="#2F6B3C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="18" width="150" height="272" rx="14"/>
+          <rect x="53" y="31" width="124" height="246" rx="6" stroke-width="2" stroke="#BFD4B4"/>
+          <rect x="191" y="196" width="7" height="36" rx="3.5"/>
+          <rect x="191" y="246" width="7" height="16" rx="3.5"/>
+        </g>
+        <circle cx="183" cy="154" r="4.5" fill="#2B2418"/>
+        <g stroke="#6B6250" stroke-width="1.5">
+          <line x1="190" y1="154" x2="232" y2="154"/>
+          <line x1="201" y1="214" x2="232" y2="214"/>
+          <line x1="201" y1="254" x2="232" y2="254"/>
+        </g>
+        <g font-family="system-ui, Roboto, Arial, sans-serif" font-size="19" font-weight="bold" fill="#2B2418">
+          <text x="238" y="149">Kamera</text>
+          <text x="238" y="209">Hangerő gomb</text>
+          <text x="238" y="249">Főgomb</text>
+        </g>
+        <g font-family="system-ui, Roboto, Arial, sans-serif" font-size="15" fill="#6B6250">
+          <text x="238" y="169">a kis pont, jobb oldalt</text>
+          <text x="238" y="229">felül hangosít, alul halkít</text>
+          <text x="238" y="269">ki- és bekapcsolás</text>
+        </g>
+        <text x="115" y="160" font-family="system-ui, Roboto, Arial, sans-serif"
+              font-size="15" fill="#BFD4B4" text-anchor="middle">képernyő</text>
+      </svg>
+      <figcaption>Így tartsd a tabletet: kamera jobbra, gombok jobbra lent.</figcaption>
+    </figure>
+
     <ol class="lepesek">
       <li class="sz-zold"><b>Tartsd a tabletet állítva úgy, hogy a kamera a jobb oldalon legyen.</b>
         <span>A kamera egy kis pont a keret közepén. Ha jobb oldalt van, jól fogod a tabletet.</span>
@@ -400,6 +444,11 @@
       <li class="sz-lila"><b>Másik alkalmazásra váltás: menj haza, aztán koppints a másikra.</b>
         <span>Nyomd meg a Kezdőlap gombot, majd koppints egy másik ikonra. Ennyi az egész!</span>
         <svg class="ill"><use href="#i-valt" xlink:href="#i-valt"/></svg></li>
+      <li class="sz-lila"><b>A képernyő alján jobbra lévő gomb: a futó alkalmazások.</b>
+        <span>Erre koppintva kis kártyákon látod, mik voltak nyitva korábban. Ha koppintasz az
+        <b>„Összes törlése"</b> gombra, mindet bezárja egyszerre — semmi nem vész el tőle,
+        és a tablet is felfrissül.</span>
+        <svg class="ill"><use href="#i-futok" xlink:href="#i-futok"/></svg></li>
     </ol>
     <div class="tipp"><b>💜 A Kezdőlap gomb a mentőöved</b>
       Ha bármikor eltévedsz, vagy valami furcsát látsz: nyomd meg a Kezdőlap
