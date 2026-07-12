@@ -224,6 +224,10 @@
 
 <!-- Piktogram-készlet (a lapon lévő kis rajzok innen hivatkoznak) -->
 <svg aria-hidden="true" style="position:absolute;width:0;height:0" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-tablet" viewBox="0 0 64 64">
+    <rect x="16" y="8" width="32" height="48" rx="6"/>
+    <circle cx="43" cy="32" r="2.5" fill="currentColor" stroke="none"/>
+  </symbol>
   <symbol id="i-be" viewBox="0 0 64 64">
     <path d="M32 8v18"/><path d="M20 14a20 20 0 1 0 24 0"/>
   </symbol>
@@ -352,28 +356,23 @@
       <p>A tablet olyan, mint egy képeskönyv, amit az ujjaddal lapozol.</p>
     </div>
     <ol class="lepesek">
-      <li class="sz-zold"><b>Bekapcsolás: tartsd nyomva az oldalsó gombot.</b>
+      <li class="sz-zold"><b>Tartsd a tabletet állítva úgy, hogy a kamera a jobb oldalon legyen.</b>
+        <span>A kamera egy kis pont a keret közepén. Ha jobb oldalt van, jól fogod a tabletet.</span>
+        <svg class="ill"><use href="#i-tablet" xlink:href="#i-tablet"/></svg></li>
+      <li class="sz-zold"><b>Bekapcsolás: a jobb alsó kis gomb a főgomb — tartsd nyomva.</b>
         <span>Számolj el háromig, amíg a képernyő fel nem villan.</span>
         <svg class="ill"><use href="#i-be" xlink:href="#i-be"/></svg></li>
       <li class="sz-zold"><b>Feloldás: húzd az ujjad a képernyőn felfelé.</b>
         <span>Mintha felhajtanál egy függönyt. Ezután látod a főképernyőt.</span>
         <svg class="ill"><use href="#i-fel" xlink:href="#i-fel"/></svg></li>
-      <li class="sz-zold"><b>Koppintás = egy finom, rövid érintés.</b>
-        <span>Így „nyomsz meg" gombokat. Nem kell erősen nyomni — olyan, mint egy simítás.</span>
-        <svg class="ill"><use href="#i-koppint" xlink:href="#i-koppint"/></svg></li>
-      <li class="sz-zold"><b>Lapozás: az ujjadat a képernyőn tartva húzod.</b>
-        <span>Jobbra-balra vagy fel-le, mint amikor könyvet lapozol.</span>
-        <svg class="ill"><use href="#i-lapoz" xlink:href="#i-lapoz"/></svg></li>
-      <li class="sz-zold"><b>Hangerő: a hosszúkás oldalsó gombbal.</b>
+      <li class="sz-zold"><b>Hangerő: a hosszúkás gomb, közvetlenül a főgomb fölött.</b>
         <span>A felső fele hangosít, az alsó halkít.</span>
         <svg class="ill"><use href="#i-hangero" xlink:href="#i-hangero"/></svg></li>
-      <li class="sz-zold"><b>Töltés: dugd be a kábelt, mint a telefont.</b>
-        <span>A jobb felső sarokban egy kis elem mutatja, mennyire van feltöltve.</span>
-        <svg class="ill"><use href="#i-toltes" xlink:href="#i-toltes"/></svg></li>
     </ol>
     <div class="tipp"><b>💚 Jó tudni</b>
       Ha egy darabig nem nyúlsz hozzá, a képernyő magától elsötétül — ez nem
-      hiba, csak „elalszik". Az oldalsó gomb egy rövid megnyomásával felébred.</div>
+      hiba, csak „elalszik". A főgomb (a jobb alsó kis gomb) egy rövid
+      megnyomásával felébred.</div>
     <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
   </section>
 
@@ -538,13 +537,13 @@
     </div>
     <ol class="lepesek">
       <li class="sz-sos"><b>Fekete a képernyő?</b>
-        <span>Csak elaludt. Nyomd meg röviden az oldalsó gombot, és felébred.</span>
+        <span>Csak elaludt. Nyomd meg röviden a főgombot (a jobb alsó kis gombot), és felébred.</span>
         <svg class="ill"><use href="#i-be" xlink:href="#i-be"/></svg></li>
       <li class="sz-sos"><b>Eltévedtél, furcsa dolgot látsz?</b>
         <span>Nyomd meg a Kezdőlap gombot (alul, középen). Mindig hazavisz.</span>
         <svg class="ill"><use href="#i-kezdolap" xlink:href="#i-kezdolap"/></svg></li>
       <li class="sz-sos"><b>Nincs hang?</b>
-        <span>Nyomd meg párszor az oldalsó hosszú gomb felső felét.</span>
+        <span>Nyomd meg párszor a hosszúkás gomb felső felét — a főgomb fölött találod.</span>
         <svg class="ill"><use href="#i-hangero" xlink:href="#i-hangero"/></svg></li>
       <li class="sz-sos"><b>Semmi nem segít?</b>
         <span>Tedd le nyugodtan a tabletet — semmi baja nem lesz. Amikor legközelebb
