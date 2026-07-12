@@ -70,6 +70,7 @@
   .m-piros { background: var(--piros); }
   .m-teal  { background: var(--teal); }
   .m-sos   { background: #8A6D1C; }
+  .m-barna { background: #6B4A2B; }
 
   .menu-tanulsag {
     text-align: center; color: var(--halvany);
@@ -100,6 +101,7 @@
   .f-piros { background: var(--piros); }
   .f-teal  { background: var(--teal); }
   .f-sos   { background: #8A6D1C; }
+  .f-barna { background: #6B4A2B; }
 
   /* ---- Lépések nagy számokkal ---- */
   .lepesek { list-style: none; counter-reset: lepes; display: grid; gap: 0.7rem; }
@@ -220,6 +222,7 @@
   .ajanlo b { display: block; font-size: 1.02rem; }
   .ajanlo small { display: block; font-size: 0.78rem; opacity: 0.9; }
   .ajanlo.kiemelt { border: 4px solid #E0B84A; background: #8F1B14; }
+  .ajanlo.a-barna { background: #6B4A2B; }
 
   /* ---- Tipp és Vigyázat dobozok ---- */
   .tipp, .vigyazat {
@@ -352,6 +355,10 @@
       <li><a class="m-teal" href="#tiktok">
         <span class="ikon">🎵</span>
         <span><b>TikTok</b><small>Rövid, vidám videók</small></span>
+      </a></li>
+      <li><a class="m-barna" href="#olvasmanyok">
+        <span class="ikon">📖</span>
+        <span><b>Olvasmányok</b><small>Könyvek, álmoskönyv, regények — ingyen</small></span>
       </a></li>
       <li id="menu-uzenetek" hidden><a class="m-rozsa" href="#uzenetek">
         <span class="ikon">💌</span>
@@ -564,6 +571,44 @@
       Ha bármi <b>nyereményt ígér</b>, vagy <b>nevet, címet, bankkártyát</b> kér —
       soha ne írj be semmit! Ilyenkor csak lapozz tovább, vagy nyomd meg a
       Kezdőlap gombot — és mutasd meg nekem, ha legközelebb ott vagyok.</div>
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+  </section>
+
+  <!-- ============ OLVASMÁNYOK ============ -->
+  <section class="lap" id="olvasmanyok">
+    <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
+    <div class="fejcim f-barna">
+      <h2>📖 Olvasmányok</h2>
+      <p>Igazi, teljes könyvek — ingyen, a nemzeti könyvtár gyűjteményéből.
+      Koppints egy könyvre, és már olvashatod is!</p>
+    </div>
+    <div class="otletek">
+      <b>Válassz egy könyvet:</b>
+      <a class="ajanlo a-barna" href="https://mek.oszk.hu/00700/00756/00756.pdf">
+        <span class="ikon">🌙</span>
+        <span><b>Álmoskönyv</b><small>Krúdy Gyula · Mit jelentenek az álmok?</small></span>
+      </a>
+      <a class="ajanlo a-barna" href="https://mek.oszk.hu/00600/00659/00659.pdf">
+        <span class="ikon">💛</span>
+        <span><b>Ida regénye</b><small>Gárdonyi Géza · Gyönyörű szerelmes történet</small></span>
+      </a>
+      <a class="ajanlo a-barna" href="https://mek.oszk.hu/00600/00656/00656.pdf">
+        <span class="ikon">🏰</span>
+        <span><b>Egri csillagok</b><small>Gárdonyi Géza · Történelmi regény az egri hősökről</small></span>
+      </a>
+      <a class="ajanlo a-barna" href="https://mek.oszk.hu/00600/00688/00688.pdf">
+        <span class="ikon">⚓</span>
+        <span><b>Az arany ember</b><small>Jókai Mór · Szerelem és kaland a Dunán</small></span>
+      </a>
+      <a class="ajanlo a-barna" href="https://mek.oszk.hu/00900/00954/00954.pdf">
+        <span class="ikon">☂️</span>
+        <span><b>Szent Péter esernyője</b><small>Mikszáth Kálmán · Derűs, kedves történet</small></span>
+      </a>
+    </div>
+    <div class="tipp"><b>🤎 Jó tudni</b>
+      A könyv megnyitása eltarthat egy kicsit — várj türelmesen! Ha a tablet
+      megkérdezi, mivel nyissa meg, koppints a <b>„Megnyitás"</b> gombra.
+      Lapozni úgy tudsz, hogy az ujjaddal felfelé húzod az oldalt.</div>
     <a class="vissza" href="#menu">⬅ Vissza a főoldalra</a>
   </section>
 
